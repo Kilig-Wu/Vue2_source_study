@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <span>{{ name }}</span>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        Vue.mixin({
+            created() {},
+            a: 1
+        })
+        Vue.mixin({
+            created() {},
+            b: 1
+        })
+        //发布订阅-》订阅（将所有的生命周期都订阅，到达某个阶段一次触发）
+        //内部会将多个mixin的created合并成一个队列,依次执行
+        const vm = new Vue({
+            el: '#app',
+            created() {},
+            data() {   //代理数据
+                return {
+                    name: 'zf',
+                    age: 20
+                }
+            }
+        })
+        console.log(Vue.options);  //Vue.options里的created是一个数组
+        //vue.mixin 可以混入一些公共方法
+    </script>
+</body>
+</html>

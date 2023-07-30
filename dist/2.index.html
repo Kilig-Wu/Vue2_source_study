@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" style="color:green;font-size:14px">
+        <div style="color: red">{{ name }}hello{{ age }}</div>
+        <span>{{ age }}</span>
+        <span>world</span>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        const vm = new Vue({
+            data() {   //代理数据
+                return {
+                    name: 'zf',
+                    age: 20,
+                    address: {
+                        a: '1'
+                    },
+                    hobby: ['eat', 'drink', { a: 1 }]
+                }
+            },
+            el: '#app'   //要将数据解析到el元素上
+        })
+
+        //属性和我们的视图关联起来，需要做到数据变化可以自动更新视图（观察者模式）
+        setTimeout(() => {
+            vm.name = '吴砚书';
+            vm.age = 40;
+            vm._update(vm._render()) //重新根据数据渲染出一个虚拟dom
+        }, 2000)
+        //1.模板引擎：每次数据更新就把模板拿出来替换（性能很差，需要正则匹配替换）1.0的时候没有引入虚拟Dom的改变
+        //2.采用虚拟Dom, 数据变化后比较虚拟Dom的差异 最后更新需要更新的地方
+        //3.核心就是需要将模板变成js语法，通过js语法生成虚拟Dom
+
+        //过程：
+        //1)将数据处理成响应式(针对对象主要是增加defineProperty,针对数组就是重写方法)
+        //2)模板编译：将模板转成ast语法树，将ast语法树生成render方法
+        //3)调用render函数，会进行取值操作 产生对于的虚拟Dom render() { _c('div', null, _v(name))}
+        //4)将虚拟dom渲染成真实dom
+    </script>
+</body>
+</html>

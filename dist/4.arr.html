@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 这里取值会调用JSON.stringfy,就会数组中的对象取值，所以对象会收集依赖 -->
+    <div id="app">
+        {{ arr }}
+       {{ a }}
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        const vm = new Vue({
+            data() {   
+                return {
+                    arr: [1, 2, 3, { a:1}, ['a', 'b', []]], //给数组本身添加dep，数组添加了某一项，可以触发更新
+                    a: { a: 1 }  //给对象也增加dep, 后续对象新增了属性，可以触发更新
+                }
+            },
+            el: '#app' 
+        })
+
+        // vm.arr[0] = 100 //会更新
+        // vm.arr.length = 100 //不会变化
+        // vm.arr.push(2)  //会更新
+        // vm.a.a = 200  //会更新
+
+        vm.a.b = 300  //不会更新（给对象添加属性）
+        // vm.a.__ob__.dep.notify()  //手动触发更新$set原理
+        // vm.arr[4].push(4)
+        vm.arr[4][2].push(4)
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 给模板中的属性添加一个收集器 dep -->
+    <!-- 页面渲染时 我们将渲染逻辑封装到watcher中 vm._update(vm._render()) -->
+    <!-- 让dep记住这个watcher即可， 稍后属性变化了可以找到对应的dep中存放的watcher进行重新渲染 -->
+    <!-- 观察者模式 -->
+    <div id="app" style="color:green;font-size:14px">
+        <div style="color: red">{{ name }}hello{{ age }}</div>
+        <span>{{ age }}</span>
+        <span>world</span>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        const vm = new Vue({
+            data() {   
+                return {
+                    name: 'zf',
+                    age: 20,
+                    address: {
+                        a: '1'
+                    },
+                    hobby: ['eat', 'drink', { a: 1 }]
+                }
+            },
+            el: '#app' 
+        })
+
+        // setTimeout(() => {
+        //     vm.name = '吴砚书';
+        //     vm.age = 40;
+        //     // vm._update(vm._render()) //数据变化后可以重新渲染
+        // }, 2000)
+
+        vm.name = 'jw';   //不会立即重新渲染页面
+        // setTimeout(() => {  
+        //     console.log(app.innerHTML);  //视图会更新
+        // })
+        // Promise.resolve().then(() => {
+        //     console.log(app.innerHTML);  //视图不会更新。原因是Promise的优先级高于Vue内部的setTimeout
+        // })
+        //需要让Vue内部的更新函数和用户的操作统一，都使用$nextTick（$nextTick）
+        //nextTick不是创建了一个异步任务，而是将这个任务维护到了队列中
+        vm.$nextTick(() => {
+            console.log(app.innerHTML); 
+        })
+
+
+        //观查者模式实现依赖收集
+        //异步更新策略
+        //mixin的实现原理
+    </script>
+</body>
+</html>
